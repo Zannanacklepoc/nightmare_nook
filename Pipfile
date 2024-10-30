@@ -2,9 +2,14 @@
 url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
-
 [packages]
 bcrypt = "*"
+=======
+flask = "*"
+mysql = "*"
+flask-bcrypt = "*"
+pymysql = "*"
+
 
 [dev-packages]
 
