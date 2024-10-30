@@ -10,7 +10,7 @@ bcrypt = Bcrypt(app)
 @app.route("/")
 def index():
     #Render the login/registration HTML template
-    return render_template("index.html")
+    return render_template("store_display.html")
 
 #Route for submitting the user registration form
 @app.route("/user/register", methods=['POST'])
@@ -28,4 +28,9 @@ def register():
         #save user info to the DB
         session['user_id'] = User.create(data)
         return redirect('dashboard')
-    return redirect('/')
+    return redirect('/admin')
+
+@app.route("/admin")
+def admin():
+    #Render the login/registration HTML template
+    return render_template("login.html")

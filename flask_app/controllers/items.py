@@ -10,22 +10,31 @@ def view_storefront():
     return render_template('dashboard.html', items=items)
 
 # CREATE
-@app.route('/item/add', methods=['GET', 'POST'])
+@app.route('/new_item', methods=['GET', 'POST'])
 def add_item():
     if request.method == 'POST':
-        data = {
-            'name': request.form['name'],
-            'price': request.form['price'],
-            'in_stock': request.form['in_stock'],
-            'description': request.form['description']
-        }
-        result = Item.save(data)
-        if result:
-            flash('Item added successfully!', 'success')
-            return redirect(url_for('view_inventory'))
-        else:
-            flash('Error adding item', 'danger')
-    return render_template('add_item.html')
+        try:
+            data = {
+                'name': request.form['Name'],
+                'price': request.form['Price'],
+                'in_stock': request.form['Stock'],
+                'description': request.form['Description']
+            }
+
+            # Attempt to save the item to the database
+            result = Item.save(data)
+
+            # Check if the result indicates a successful insertion
+            if result:
+                flash('Item added successfully!', 'success')
+                return redirect(url_for('view_inventory'))  # Redirect to inventory view
+            else:
+                flash('Error adding item', 'danger')
+
+        except KeyError as e:
+            flash(f'Missing field: {str(e)}', 'danger')
+            return redirect('/dashboard')  # Redirect back to the form if there's an error
+    return render_template('dashboard.html')
 
 # READ ONE
 @app.route('/items/<int:item_id>')
