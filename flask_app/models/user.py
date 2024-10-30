@@ -1,7 +1,5 @@
 
-from flask_app.config.mysqlconnection import connectToMySQL
-=======
-from flask_app.config.MySQLconnection import connect_to_mysql
+from flask_app.config.mysqlconnection import connect_to_mysql
 import re	# the regex module
 from flask_app import app
 from flask import flash
@@ -16,26 +14,19 @@ class User:
         self.id = data['id']
         self.first_name= data['first_name']
         self.last_name = data['last_name']
-        self.email_address = data['email_address']
+        self.email = data['email']
         self.password = data['password']
         self.posts = []
 
     #Insert Method/Query
     @classmethod
-
     def create(cls, data):
-=======
-    def create(cls):
         query = """
         INSERT INTO users
-        (first_name, last_name, email_address, password) 
-        VALUES (%(first_name)s,%(last_name)s,%(email_address)s,%(password)s);
+        (first_name, last_name, email, password) 
+        VALUES (%(first_name)s,%(last_name)s,%(email)s,%(password)s);
         """
-        #send query to the database to save the user info
-
-        user_id = connectToMySQL(cls.db).query_db(query,data)
-=======
-        user_id = connect_to_mysql('storefront').query_db(query)
+        user_id = connect_to_mysql('storefront').query_db(query, data)
         return user_id
     
     #Get All Method/Query 
@@ -45,9 +36,6 @@ class User:
         SELECT * 
         FROM users;
         """
-
-        results = connectToMySQL(cls.db).query_db(query)
-=======
         results = connect_to_mysql('storefront').query_db(query)
         if not results:
             return []
@@ -64,9 +52,6 @@ class User:
         FROM users 
         WHERE id = %(id)s;
         """
-
-        results = connectToMySQL(cls.db).query_db(query, {'id': id})
-=======
         results = connect_to_mysql('storefront').query_db(query, {'id': id})
 
         user = cls(results [0])
@@ -74,20 +59,14 @@ class User:
     
     #Get by Email Method/Query 
     @classmethod
-
-    def get_by_email(cls,data):
-=======
-    def get_by_email(cls):
+    def get_by_email(cls, data):
 
         query = """
         SELECT * 
         FROM users 
-        WHERE email_address = %(email)s;
+        WHERE email = %(email)s;
         """
-
-        result = connectToMySQL(cls.db).query_db(query,data)
-=======
-        result = connect_to_mysql('storefront').query_db(query)
+        result = connect_to_mysql('storefront').query_db(query, data)
 
         # Didn't find a matching user
         if len(result) < 1:  
@@ -172,19 +151,13 @@ class User:
         
         # checks database for emails in use
     @classmethod
-
-    def check_database(cls, data):
-=======
     def check_database(cls):
 
         query = """
         SELECT * 
         FROM users 
-        WHERE email_address = %(email)s;
+        WHERE email = %(email)s;
         """
-
-        results = connectToMySQL(cls.db).query_db(query, data)
-=======
         results = connect_to_mysql('storefront').query_db(query)
 
         if len(results) < 1:
@@ -192,20 +165,15 @@ class User:
         return cls(results[0])
         #retrieve unique user
     @classmethod
-
-    def get_by_id(cls, data):
-=======
-    def get_by_id(cls):
+    def get_by_id(cls, user_id):
 
         query = """
         SELECT * 
         FROM users 
         WHERE id = %(id)s;
         """
-
-        results = connectToMySQL(cls.db).query_db(query, data)
-=======
-        results = connect_to_mysql('storefront').query_db(query)
+        data = {'id': user_id}
+        results = connect_to_mysql('storefront').query_db(query, data)
 
         return results [0]
 

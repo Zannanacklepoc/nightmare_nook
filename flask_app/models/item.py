@@ -13,7 +13,7 @@ class Item:
     def get_all(cls):
         # GET ALL
         query = "SELECT * FROM items;"
-        results = MySQLConnection('nightmare_nook').query_db(query)
+        results = MySQLConnection('storefront').query_db(query)
         items = []
         for row in results:
             items.append(cls(row))
@@ -24,7 +24,7 @@ class Item:
         # GET BY ID
         query = "SELECT * FROM items WHERE id = %(id)s;"
         data = {'id': item_id}
-        result = MySQLConnection('nightmare_nook').query_db(query, data)
+        result = MySQLConnection('storefront').query_db(query, data)
         if result:
             return cls(result[0])
         return None
@@ -34,10 +34,10 @@ class Item:
         # SAVE
         if Item.validate_item(data):
             query = """
-            INSERT INTO items (name, price, in_stock, description, category)
-            VALUES (%(name)s, %(price)s, %(in_stock)s, %(description)s, %(category)s);
+            INSERT INTO items (name, price, stock, description, category)
+            VALUES (%(name)s, %(price)s, %(stock)s, %(description)s, %(category)s);
             """
-            mysql = MySQLConnection('nightmare_nook')
+            mysql = MySQLConnection('storefront')
             item_id = mysql.query_db(query, data)
             if item_id:
                 flash('Item added successfully!', 'success')
@@ -60,7 +60,7 @@ class Item:
         SET name=%(name)s, price=%(price)s, in_stock=%(in_stock)s, description=%(description)s, category=%(category)s
         WHERE id = %(id)s;
         """
-        MySQLConnection('nightmare_nook').query_db(query, data)
+        MySQLConnection('storefront').query_db(query, data)
         return True
 
     @classmethod
@@ -68,7 +68,7 @@ class Item:
         # DELETE
         query = "DELETE FROM items WHERE id = %(id)s;"
         data = {'id': item_id}
-        MySQLConnection('nightmare_nook').query_db(query, data)
+        MySQLConnection('storefront').query_db(query, data)
 
     # Validation
     @staticmethod

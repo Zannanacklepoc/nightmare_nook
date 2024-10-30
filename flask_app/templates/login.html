@@ -37,7 +37,7 @@
     
     <div class="row g-3">
         <div class="col-md-6"> <!-- Adjust column width as needed -->
-            <form action="/" method="post">
+            <form action="/user/register" method="post">
                 <label for="first_name">First Name (must be min 3 characters)</label>
                 <input type="text" name="first_name" class="form-control" required>
                 <label for="last_name">Last Name (must be min 3 characters)</label>
@@ -47,13 +47,13 @@
                 <label for="password">Password (must be at least 8 characters)</label>
                 <input type="password" name="password" class="form-control" required>
                 <label for="confirm_password">Confirm Password</label>
-                <input type="password" name="confirm_password" class="form-control" required>
+                <input type="password" name="passConf" class="form-control" required>
                 <input type="submit" value="Submit" class="btn btn-primary mt-2">
             </form>
         </div>
         
         <div class="col-md-6"> <!-- Adjust column width as needed -->
-            <form action="/user/register" method="post">
+            <form action="/user/login" method="post">
                 <label for="email">Email</label>
                 <input type="email" name="email" class="form-control" required>
                 <label for="password">Password</label>
