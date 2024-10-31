@@ -27,7 +27,7 @@ def register():
         #send form data to a user.py User class
         #save user info to the DB
         session['user_id'] = User.create(data)
-        return redirect('dashboard')
+        return redirect('/dashboard')
     return redirect('/admin')
 
 @app.route("/admin")

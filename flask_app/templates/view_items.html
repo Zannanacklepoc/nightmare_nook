@@ -3,6 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ item.name }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+
     <title>Document</title>
     <style>
         body {
@@ -10,26 +20,92 @@
             color: white;
             font-family: Arial, sans-serif;
             margin: 0;
+
             padding: 20px;
         }
         h1 {
             color: purple;
+
+            margin-bottom: 20px;
+        }
+        a {
+            color: #d6a0ff;
+
         }
         a {
             color: purple;
-            text-decoration: none;
-            font-weight: bold;
-            transition: color 0.3s;
-        }
-        a:hover {
+
+
+            color: #e0b3ff;
+
             color: lightpurple;
+
+
+        .button-container {
+            margin-bottom: 20px;
         }
-        .item {
-            background-color: #222;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
+        .btn-custom {
+            background-color: purple;
+            border-color: purple;
+            color: white;
         }
+        .btn-custom:hover {
+            background-color: darkviolet;
+            border-color: darkviolet;
+        }
+        .spooky-icon {
+            margin-right: 5px; /* Space between icon and text */
+            color: orange; /* Icon color */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Nightmare Nook!</h1>
+
+        <div class="button-container mb-4">
+            <a href="/dashboard" class="btn btn-custom me-2">Back to Dashboard</a>
+            <a href="/" class="btn btn-custom">Logout</a>
+        </div>
+
+        <div class="container mt-3">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <div class="item">
+            <h2>
+                <i class="fas fa-ghost spooky-icon"></i>
+                {{ item.name }}
+            </h2>
+            <p><strong>Price:</strong> ${{ item.price }}</p>
+            <p><strong>In stock:</strong> {{ item.stock }}</p>
+            <p><strong>Description:</strong> {{ item.description }}</p>
+            <div class="actions mt-3">
+                <a href="/item/{{ item.id }}/edit" class="btn btn-custom me-2">
+                    <i class="fas fa-edit spooky-icon"></i>Edit Item
+                </a>
+                <form action="/item/{{ item.id }}/delete" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash spooky-icon"></i>Delete Item
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
     </style>
 </head>
 <body>
@@ -44,3 +120,4 @@
     </div>
 </body>
 </html>
+
