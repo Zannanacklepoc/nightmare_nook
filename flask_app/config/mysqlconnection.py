@@ -4,7 +4,8 @@ import pymysql.cursors
 class MySQLConnection:
     def __init__(self, db):
         # change the user and password as needed
-        connection = pymysql.connect(host = 'localhost',
+        connection = pymysql.connect(host = '127.0.0.1',
+                                    port=3306,
                                     user = 'root', 
                                     password = 'root', 
                                     db = db,
@@ -19,7 +20,7 @@ class MySQLConnection:
             try:
                 query = cursor.mogrify(query, data)
                 print("Running Query:", query)
-
+                
                 cursor.execute(query)
                 if query.lower().find("insert") >= 0:
                     # INSERT queries will return the ID NUMBER of the row inserted
@@ -34,7 +35,7 @@ class MySQLConnection:
                     self.connection.commit()
             except Exception as e:
                 # if the query fails the method will return FALSE
-                print("Something went wrong", e)
+                print("!!!!!!!!!!!!!!!!!!Something went wrong!!!!!!!!!!!!!!!!!", e)
                 return False
             finally:
                 # close the connection

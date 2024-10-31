@@ -1,61 +1,75 @@
-from flask import render_template, request, redirect, session, url_for, flash
+from flask import render_template, request, redirect, flash, url_for, session
 from flask_app import app
 from flask_app.models.item import Item
-from flask_app.models.user import User
 
-# READ ALL
-@app.route('/')
+@app.route('/dashboard')
 def view_storefront():
     items = Item.get_all()
     return render_template('dashboard.html', items=items)
 
-# CREATE
-@app.route('/item/add', methods=['GET', 'POST'])
+@app.route('/new_item', methods=['GET', 'POST'])
 def add_item():
     if request.method == 'POST':
         data = {
             'name': request.form['name'],
             'price': request.form['price'],
-            'in_stock': request.form['in_stock'],
-            'description': request.form['description']
+            'stock': request.form['stock'],
+            'description': request.form['description'],
+            'user_id': session['user_id']
         }
         result = Item.save(data)
         if result:
-            flash('Item added successfully!', 'success')
-            return redirect(url_for('view_inventory'))
+            return redirect(url_for('view_storefront'))
         else:
-            flash('Error adding item', 'danger')
+            flash("Item could not be saved to the database.", 'danger')
+            return redirect('/new_item')
     return render_template('add_item.html')
 
-# READ ONE
 @app.route('/items/<int:item_id>')
 def view_item(item_id):
     item = Item.get_by_id(item_id)
-    return render_template('view_item.html', item=item)
+    if item:
+        return render_template('view_item.html', item=item)
+    else:
+        flash("Item not found.", 'danger')
+        return redirect(url_for('view_storefront'))
 
-# EDIT
 @app.route('/item/<int:item_id>/edit', methods=['GET', 'POST'])
 def edit_item(item_id):
     item = Item.get_by_id(item_id)
+    if not item:
+        flash("Item not found.", 'danger')
+        return redirect(url_for('view_storefront'))
+
     if request.method == 'POST':
         data = {
             'id': item_id,
-            'name': request.form['name'],
-            'price': request.form['price'],
-            'in_stock': request.form['in_stock'],
-            'description': request.form['description']
+            'name': request.form['name'],         
+            'price': request.form['price'],       
+            'stock': request.form['stock'],       
+            'description': request.form['description'],  
+            'user_id': session['user_id']
         }
+        
+        # Attempt update and capture the result
         success = Item.update(data)
-        if success:
+        print("Update result:", success)  # Log whether update returns anything
+
+        if success is not False:  # If not explicitly False, assume success
             flash('Item updated successfully!', 'success')
-            return redirect(url_for('view_inventory'))
+            return redirect(url_for('view_storefront'))
         else:
             flash('Error updating item', 'danger')
+            return redirect(url_for('edit_item', item_id=item_id))
+    
     return render_template('edit_item.html', item=item)
 
-# DELETE
+
+
+
+
 @app.route('/item/<int:item_id>/delete', methods=['POST'])
 def delete_item(item_id):
     Item.delete(item_id)
     flash('Item deleted successfully!', 'success')
-    return redirect(url_for('view_inventory'))
+    return redirect(url_for('view_storefront'))

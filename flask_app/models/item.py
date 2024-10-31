@@ -1,76 +1,68 @@
-from flask import flash
 from flask_app.config.mysqlconnection import MySQLConnection
+from flask import flash
 
 class Item:
+    db = "storefront"
+
     def __init__(self, data):
         self.id = data['id']
         self.name = data['name']
         self.price = data['price']
-        self.in_stock = data['in_stock']
+        self.stock = data['stock']
         self.description = data['description']
+        self.user_id = data['user_id']
+
+    @staticmethod
+    def save(data):
+        query = """
+        INSERT INTO items (name, price, stock, description, user_id)
+        VALUES (%(name)s, %(price)s, %(stock)s, %(description)s, %(user_id)s);
+        """
+        item_id = MySQLConnection(Item.db).query_db(query, data)
+        print("Item ID created:", item_id)  # Debug: Confirm item is created
+        if item_id:
+            flash('Item added successfully!', 'success')
+            return item_id
+        else:
+            flash('Failed to add item. Please try again.', 'danger')
+            return None
 
     @classmethod
     def get_all(cls):
-        # GET ALL
         query = "SELECT * FROM items;"
-        results = MySQLConnection('nightmare_nook').query_db(query)
-        items = []
-        for row in results:
-            items.append(cls(row))
+        results = MySQLConnection(cls.db).query_db(query)
+        items = [cls(row) for row in results]
         return items
 
     @classmethod
     def get_by_id(cls, item_id):
-        # GET BY ID
         query = "SELECT * FROM items WHERE id = %(id)s;"
         data = {'id': item_id}
-        result = MySQLConnection('nightmare_nook').query_db(query, data)
-        if result:
-            return cls(result[0])
-        return None
-
-    @staticmethod
-    def save(data):
-        # SAVE
-        if Item.validate_item(data):
-            query = """
-            INSERT INTO items (name, price, in_stock, description, category)
-            VALUES (%(name)s, %(price)s, %(in_stock)s, %(description)s, %(category)s);
-            """
-            mysql = MySQLConnection('nightmare_nook')
-            item_id = mysql.query_db(query, data)
-            if item_id:
-                flash('Item added successfully!', 'success')
-                return item_id
-            else:
-                flash('Failed to add item. Please try again.', 'danger')
-                return None
-        else:
-            flash('Invalid data. Please check your inputs.', 'danger')
-            return None
-                # Validation flash msgs
-
+        result = MySQLConnection(cls.db).query_db(query, data)
+        return cls(result[0]) if result else None
+    
+    
     @classmethod
     def update(cls, data):
-        # EDIT/UPDATE
-        if not cls.validate_item(data):
-            return False
         query = """
         UPDATE items
-        SET name=%(name)s, price=%(price)s, in_stock=%(in_stock)s, description=%(description)s, category=%(category)s
+        SET name=%(name)s, price=%(price)s, stock=%(stock)s, description=%(description)s, user_id=%(user_id)s
         WHERE id = %(id)s;
         """
-        MySQLConnection('nightmare_nook').query_db(query, data)
-        return True
+        print("Executing Update Query:", query, "with Data:", data)
+        result = MySQLConnection(cls.db).query_db(query, data)
+        print("Update Execution Result:", result)  # This should log whether it returns anything or not
+        return result
+
+
+
 
     @classmethod
     def delete(cls, item_id):
-        # DELETE
         query = "DELETE FROM items WHERE id = %(id)s;"
         data = {'id': item_id}
-        MySQLConnection('nightmare_nook').query_db(query, data)
+        return MySQLConnection(cls.db).query_db(query, data)
 
-    # Validation
     @staticmethod
     def validate_item(data):
         is_valid = True
@@ -83,7 +75,7 @@ class Item:
             flash("Price must be greater than 0.", 'danger')
             is_valid = False
 
-        if not data.get('in_stock') or int(data['in_stock']) < 0:
+        if not data.get('stock') or int(data['stock']) < 0:
             flash("In-stock quantity cannot be negative.", 'danger')
             is_valid = False
 
