@@ -21,53 +21,67 @@
         .input-group, .row {
             margin-top: 20px;
         }
+        .form-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
     </style>
 </head>
 <body class="p-3 mb-2 text-light">
-    <div class="input-group mb-3">
-        <h1>Login for Admins only</h1>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <p>{{ message }}</p>
-            {% endfor %}
-        {% endif %}
+    <div class="container mt-4">
+        <h1>Login for Admins Only</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
         {% endwith %}
     </div>
-    
-    <div class="row g-3">
-        <div class="col-md-6">
-            <form action="/user/register" method="post">
-                <label for="first_name">First Name (must be min 3 characters)</label>
-                <input type="text" name="first_name" id="first_name" class="form-control" required>
 
-                <label for="last_name">Last Name (must be min 3 characters)</label>
-                <input type="text" name="last_name" id="last_name" class="form-control" required>
+    <div class="container mt-3 form-container">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <form action="/user/register" method="post">
+                    <label for="first_name">First Name (must be min 3 characters)</label>
+                    <input type="text" name="first_name" id="first_name" class="form-control" required>
 
-                <label for="register_email">Email (please use a valid email)</label>
-                <input type="email" name="email" id="register_email" class="form-control" required>
+                    <label for="last_name">Last Name (must be min 3 characters)</label>
+                    <input type="text" name="last_name" id="last_name" class="form-control" required>
 
-                <label for="register_password">Password (must be at least 8 characters)</label>
-                <input type="password" name="password" id="register_password" class="form-control" required>
+                    <label for="register_email">Email (please use a valid email)</label>
+                    <input type="email" name="email" id="register_email" class="form-control" required>
 
-                <label for="confirm_password">Confirm Password</label>
-                <input type="password" name="passConf" id="confirm_password" class="form-control" required>
+                    <label for="register_password">Password (must be at least 8 characters)</label>
+                    <input type="password" name="password" id="register_password" class="form-control" required>
 
-                <input type="submit" value="Submit" class="btn btn-primary mt-2">
-            </form>
-        </div>
-        
-        <div class="col-md-6">
-            <form action="/user/login" method="post">
-                <label for="login_email">Email</label>
-                <input type="email" name="email" id="login_email" class="form-control" required>
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" name="passConf" id="confirm_password" class="form-control" required>
 
-                <label for="login_password">Password</label>
-                <input type="password" name="password" id="login_password" class="form-control" required>
+                    <input type="submit" value="Register" class="btn btn-primary mt-2">
+                </form>
+            </div>
+            
+            <div class="col-md-6">
+                <form action="/user/login" method="post">
+                    <label for="login_email">Email</label>
+                    <input type="email" name="email" id="login_email" class="form-control" required>
 
-                <input type="submit" value="Submit" class="btn btn-primary mt-2">
-            </form>
+                    <label for="login_password">Password</label>
+                    <input type="password" name="password" id="login_password" class="form-control" required>
+
+                    <input type="submit" value="Login" class="btn btn-primary mt-2">
+                </form>
+            </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
