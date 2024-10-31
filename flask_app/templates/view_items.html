@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: purple;
+        }
+        a {
+            color: purple;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        a:hover {
+            color: lightpurple;
+        }
+        .item {
+            background-color: #222;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to Nightmare Nook!</h1>
+    <a href="/">Store Front</a>
+
+    <div class="item">
+        <h1>{{item.name}}</h1>
+        <p>Price: {{item.price}}</p>
+        <p>In stock: {{item.stock}}</p>
+        <p>Description: {{item.description}}</p>
+    </div>
+</body>
+</html>
