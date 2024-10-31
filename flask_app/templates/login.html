@@ -45,6 +45,7 @@
         {% endwith %}
     </div>
 
+
     <div class="container mt-3 form-container">
         <div class="row g-3">
             <div class="col-md-6">
@@ -79,8 +80,34 @@
                     <input type="submit" value="Login" class="btn btn-primary mt-2">
                 </form>
             </div>
+
+    
+    <div class="row g-3">
+        <div class="col-md-6"> <!-- Adjust column width as needed -->
+            <form action="/user/register" method="post">
+                <label for="first_name">First Name (must be min 3 characters)</label>
+                <input type="text" name="first_name" class="form-control" required>
+                <label for="last_name">Last Name (must be min 3 characters)</label>
+                <input type="text" name="last_name" class="form-control" required>
+                <label for="email">Email (please use a valid email)</label>
+                <input type="email" name="email" class="form-control" required>
+                <label for="password">Password (must be at least 8 characters)</label>
+                <input type="password" name="password" class="form-control" required>
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" name="passConf" class="form-control" required>
+                <input type="submit" value="Submit" class="btn btn-primary mt-2">
+            </form>
         </div>
-    </div>
+        
+        <div class="col-md-6"> <!-- Adjust column width as needed -->
+            <form action="/user/login" method="post">
+                <label for="email">Email</label>
+                <input type="email" name="email" class="form-control" required>
+                <label for="password">Password</label>
+                <input type="password" name="password" class="form-control" required>
+                <input type="submit" value="Submit" class="btn btn-primary mt-2">
+            </form>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

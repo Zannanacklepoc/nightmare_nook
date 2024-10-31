@@ -1,5 +1,9 @@
+
 from flask_app.config.mysqlconnection import connect_to_mysql
 import re  # the regex module
+
+
+
 from flask_app import app
 from flask import flash
 
@@ -20,11 +24,19 @@ class User:
     @classmethod
     def create(cls, data):
         query = """
+
         INSERT INTO users (first_name, last_name, email, password)
         VALUES (%(first_name)s, %(last_name)s, %(email_address)s, %(password)s);
         """
         user_id = connect_to_mysql(cls.db).query_db(query, data)
         print("User ID created:", user_id)  # Debugging: Print the ID to confirm insertion
+
+        INSERT INTO users
+        (first_name, last_name, email, password) 
+        VALUES (%(first_name)s,%(last_name)s,%(email)s,%(password)s);
+        """
+        user_id = connect_to_mysql('storefront').query_db(query, data)
+
         return user_id
 
     # Get All Method/Query
@@ -34,7 +46,11 @@ class User:
         SELECT * 
         FROM users;
         """
+
         results = connect_to_mysql(cls.db).query_db(query)
+
+        results = connect_to_mysql('storefront').query_db(query)
+
         if not results:
             return []
         users = []
@@ -50,18 +66,34 @@ class User:
         FROM users 
         WHERE id = %(id)s;
         """
+
         results = connect_to_mysql(cls.db).query_db(query, {'id': id})
         return cls(results[0]) if results else None
 
     # Get by Email Method/Query
     @classmethod
     def get_by_email(cls, data):
+
+        results = connect_to_mysql('storefront').query_db(query, {'id': id})
+
+        user = cls(results [0])
+        return user
+    
+    #Get by Email Method/Query 
+    @classmethod
+    def get_by_email(cls, data):
+
+
         query = """
         SELECT * 
         FROM users 
         WHERE email = %(email)s;
         """
+
         result = connect_to_mysql(cls.db).query_db(query, data)
+
+        result = connect_to_mysql('storefront').query_db(query, data)
+
 
         # Didn't find a matching user
         if len(result) < 1:
@@ -144,7 +176,12 @@ class User:
             is_valid = False
         return is_valid
 
+
     # Checks database for emails in use
+
+        
+        # checks database for emails in use
+
     @classmethod
     def check_database(cls):
         query = """
@@ -152,11 +189,21 @@ class User:
         FROM users 
         WHERE email = %(email)s;
         """
+
         results = connect_to_mysql(cls.db).query_db(query)
+
+        results = connect_to_mysql('storefront').query_db(query)
+
 
         if len(results) < 1:
             return False
         return cls(results[0])
+
+
+        #retrieve unique user
+    @classmethod
+    def get_by_id(cls, user_id):
+
 
     # Retrieve unique user by ID
     @classmethod
@@ -167,7 +214,12 @@ class User:
         WHERE id = %(id)s;
         """
         data = {'id': user_id}
+
         results = connect_to_mysql(cls.db).query_db(query, data)
 
         # Return None if no user found to prevent IndexError
         return cls(results[0]) if results else None
+
+        results= = connect_to_mysql('storefront').query_db(query, data)
+
+        return results [0]
