@@ -40,7 +40,7 @@ def add_item():
 @app.route('/items/<int:item_id>')
 def view_item(item_id):
     item = Item.get_by_id(item_id)
-    return render_template('view_item.html', item=item)
+    return render_template('view_items.html', item=item)
 
 # EDIT
 @app.route('/item/<int:item_id>/edit', methods=['GET', 'POST'])
