@@ -8,7 +8,7 @@ If time permits we would like to try a item category list.
 
 Our group name and store name will be Nightmare Nook.
 Leah Eddy - Project leader - Frontend and bootstraps
-Abigail Gnomes - Backend set up, registration and login.
+Abigail Acevedo Gomez - Backend set up, registration and login.
 Kelsie Bowe - CRUD developer
 Alex Pedraza - Debugger and floater. 
 
